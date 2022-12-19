@@ -6,7 +6,7 @@ import org.springframework.web.service.annotation.PostExchange;
 /**
  * @author Rossen Stoyanchev
  */
-public interface VerificationService {
+public interface VerificationClient {
 
 	@PostExchange(url = "/verify")
 	CustomerVerificationResult verify(@RequestBody CustomerApplication customerApplication);

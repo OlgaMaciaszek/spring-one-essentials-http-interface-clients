@@ -16,8 +16,8 @@ public class CustomerServiceApplication {
 	}
 
 	@Bean
-	public VerificationService verificationService(HttpServiceProxyFactory httpServiceProxyFactory) {
-		return httpServiceProxyFactory.createClient(VerificationService.class);
+	public VerificationClient verificationService(HttpServiceProxyFactory httpServiceProxyFactory) {
+		return httpServiceProxyFactory.createClient(VerificationClient.class);
 	}
 
 	@Bean

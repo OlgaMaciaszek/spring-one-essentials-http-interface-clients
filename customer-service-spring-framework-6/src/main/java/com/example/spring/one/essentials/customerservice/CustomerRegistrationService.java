@@ -9,15 +9,15 @@ import org.springframework.stereotype.Service;
 public class CustomerRegistrationService {
 	private final CustomerRepository customerRepository;
 
-	private final VerificationService verificationService;
+	private final VerificationClient verificationClient;
 
-	public CustomerRegistrationService(CustomerRepository customerRepository, VerificationService verificationService) {
+	public CustomerRegistrationService(CustomerRepository customerRepository, VerificationClient verificationClient) {
 		this.customerRepository = customerRepository;
-		this.verificationService = verificationService;
+		this.verificationClient = verificationClient;
 	}
 
 	CustomerApplicationResult register(CustomerApplication customerApplication) {
-		CustomerVerificationResult verificationResult = verificationService.verify(customerApplication);
+		CustomerVerificationResult verificationResult = verificationClient.verify(customerApplication);
 		if (CustomerVerificationResult.Status.APPROVED.equals(verificationResult.getStatus())) {
 			Customer customer = customerRepository.create(new Customer(customerApplication));
 			return new CustomerApplicationResult(customerApplication.getId(), customer.getId(), CustomerApplicationResult.Status.ACCEPTED);
