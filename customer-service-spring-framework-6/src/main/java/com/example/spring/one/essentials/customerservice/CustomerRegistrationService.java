@@ -1,7 +1,5 @@
 package com.example.spring.one.essentials.customerservice;
 
-import reactor.core.publisher.Mono;
-
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,14 +16,13 @@ public class CustomerRegistrationService {
 		this.verificationService = verificationService;
 	}
 
-	Mono<CustomerApplicationResult> register(CustomerApplication customerApplication) {
-		Mono<CustomerVerificationResult> verificationResult = verificationService.verify(customerApplication);
-		return verificationResult.map(result -> {
-			if (CustomerVerificationResult.Status.APPROVED.equals(result.getStatus())) {
-				Customer customer = customerRepository.create(new Customer(customerApplication));
-				return new CustomerApplicationResult(customerApplication.getId(), customer.getId(), CustomerApplicationResult.Status.ACCEPTED);
-			}
-			return new CustomerApplicationResult(customerApplication.getId(), null, CustomerApplicationResult.Status.REJECTED);
-		});
+	CustomerApplicationResult register(CustomerApplication customerApplication) {
+		CustomerVerificationResult verificationResult = verificationService.verify(customerApplication);
+		if (CustomerVerificationResult.Status.APPROVED.equals(verificationResult.getStatus())) {
+			Customer customer = customerRepository.create(new Customer(customerApplication));
+			return new CustomerApplicationResult(customerApplication.getId(), customer.getId(), CustomerApplicationResult.Status.ACCEPTED);
+		}
+		return new CustomerApplicationResult(customerApplication.getId(), null, CustomerApplicationResult.Status.REJECTED);
 	}
+
 }
